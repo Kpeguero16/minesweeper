@@ -43,3 +43,20 @@ export function createGame(width: number, height: number, mineCount: number): Ga
 
   return gameBoard;
 }
+
+export function neighbors(game: Game, i: number): number[] {
+  const x = i % game.width;
+  const y = Math.floor(i / game.width);
+  const result = [];
+  for (let dy = -1; dy <= 1; dy++){
+    for (let dx = -1; dx <= 1; dx++){
+      if(dx === 0 && dy === 0){continue;}
+      const nx = x + dx;
+      const ny = y + dy;
+      if (nx >= 0 && nx < game.width && ny >= 0 && ny < game.height){
+        result.push(ny * game.width + nx)
+      }
+    }
+  }
+  return result;
+}

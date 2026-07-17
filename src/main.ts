@@ -19,4 +19,5 @@ function cellIndexFromEvent(e: Event): number | null {
 gridEl.addEventListener('click', (e) => {
   const i = cellIndexFromEvent(e);
   if (i === null) return;
+  console.log(i)
 });
