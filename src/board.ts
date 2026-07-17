@@ -60,3 +60,76 @@ export function neighbors(game: Game, i: number): number[] {
   }
   return result;
 }
+
+function placeMines(game: Game, safeIndex: number): void {
+  let forbidden = new Set([safeIndex, ...neighbors(game, safeIndex)]);
+  if (game.cells.length - forbidden.size < game.mineCount) {
+    forbidden = new Set([safeIndex]);
+  }
+  let remaining = game.mineCount;
+  while(remaining > 0){
+    const r = Math.floor(Math.random() * game.cells.length);
+    if (!forbidden.has(r)){
+      game.cells[r].mine = true;
+      forbidden.add(r);
+      remaining-=1;
+    }
+  }
+  for(let i = 0; i < game.cells.length; i++){
+    if(game.cells[i].mine === false){
+      game.cells[i].adjacent = neighbors(game, i).filter((n) => game.cells[n].mine).length;
+    }
+  }
+}
+
+export function reveal(game: Game, i: number):void {
+  if (game.status === 'won' || game.status === 'lost') return;
+
+  if (game.status === 'ready'){
+    placeMines(game, i);
+    game.status = 'playing'
+  }
+
+  if(game.cells[i].state !== 'hidden') return;
+  
+  if(game.cells[i].mine){
+    game.cells[i].state = 'revealed';
+    game.hitIndex = i;
+    game.status = 'lost';
+    for (let m = 0; m < game.cells.length; m++){
+      if (game.cells[m].mine){
+        game.cells[m].state = 'revealed';
+      }
+    }
+    return;
+  }
+  
+  const stack = [i];
+  while (stack.length > 0) {
+    const j = stack.pop()!;
+    const cell = game.cells[j];
+    if (cell.state !== 'hidden') continue;
+    cell.state = 'revealed';
+    if (cell.adjacent === 0) {
+      stack.push(...neighbors(game, j));
+    }
+  }
+  checkWin(game);
+}
+
+export function toggleFlag(game: Game, i: number):void {
+  if (game.status === 'won' || game.status === 'lost') return;
+  const cell = game.cells[i];
+  if(cell.state === 'hidden'){
+    cell.state = 'flagged';
+  }
+  else if (cell.state === 'flagged'){
+    cell.state = 'hidden';
+  }
+}
+
+function checkWin(game: Game): void {
+  if (game.cells.every((c) => c.mine || c.state === 'revealed')) {
+    game.status = 'won';
+  }
+}
