@@ -7,7 +7,24 @@
     <title>minesweeper</title>
   </head>
   <body>
-    <div id="app"></div>
+    <div id="app">
+      <div class="header">
+        <span id="counter" class="lcd">010</span>
+        <button id="face" type="button">🙂</button>
+        <span id="timer" class="lcd">000</span>
+      </div>
+      <div class="controls">
+        <select id="difficulty">
+          <option value="beginner">Beginner (9×9)</option>
+          <option value="intermediate">Intermediate (16×16)</option>
+          <option value="expert">Expert (30×16)</option>
+        </select>
+        <button id="flag-mode" type="button" aria-pressed="false">🚩 Flag mode: off</button>
+      </div>
+      <div class="board-wrap">
+        <div id="grid"></div>
+      </div>
+    </div>
     <script type="module" src="/src/main.ts"></script>
   </body>
 </html>
