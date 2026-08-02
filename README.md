@@ -1,5 +1,7 @@
 # Minesweeper
 
+<img width="1350" height="540" alt="minesweeper" src="https://github.com/user-attachments/assets/47a3c2eb-8755-48d2-8e23-28a275a2d474" />
+
 ## Requirements
 
 Node.js 20.19 or newer.
