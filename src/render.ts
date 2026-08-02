@@ -15,5 +15,37 @@ export function initGrid(game: Game): void {
 }
 
 export function render(game: Game): void {
-  // TO-DO
+  for (let i = 0; i < game.cells.length; i++) {
+    const cell = game.cells[i];
+    const btn = gridEl.children[i] as HTMLButtonElement;
+
+    if (cell.state === 'flagged' && game.status === 'lost' && cell.mine === false) {
+      btn.className = 'cell wrong';
+      btn.textContent = '❌'
+    }
+    else if (cell.state === 'flagged') {
+      btn.className = 'cell';
+      btn.textContent = '🚩'
+    }
+    else if (cell.state === 'hidden') {
+      btn.className = 'cell';
+      btn.textContent = '';
+    }
+    else if (cell.state === 'revealed' && cell.mine === true && i === game.hitIndex) {
+      btn.className = 'cell revealed hit'
+      btn.textContent = '💣'
+    }
+    else if (cell.state === 'revealed' && cell.mine === true) {
+      btn.className = 'cell revealed';
+      btn.textContent = '💣'
+    }
+    else if (cell.adjacent > 0) {
+      btn.className = `cell revealed n${cell.adjacent}`;
+      btn.textContent = String(cell.adjacent);
+    }
+    else {
+      btn.className = 'cell revealed';
+      btn.textContent = '';
+    }
+  }
 }

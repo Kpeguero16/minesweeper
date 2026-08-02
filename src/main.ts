@@ -1,5 +1,5 @@
 import './style.css';
-import { createGame } from './board';
+import { createGame, reveal } from './board';
 import { initGrid, render } from './render';
 
 let game = createGame(9, 9, 10);
@@ -19,5 +19,6 @@ function cellIndexFromEvent(e: Event): number | null {
 gridEl.addEventListener('click', (e) => {
   const i = cellIndexFromEvent(e);
   if (i === null) return;
-  console.log(i)
+  reveal(game, i);
+  render(game);
 });
