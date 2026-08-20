@@ -1,6 +1,27 @@
 import type { Game } from './board';
 
 const gridEl = document.querySelector<HTMLDivElement>('#grid')!;
+const counterEl = document.querySelector<HTMLSpanElement>('#counter')!;
+const faceEl = document.querySelector<HTMLButtonElement>('#face')!;
+
+export function formatCounter(value: number): string {
+  if (value < 0) {
+    return `-${String(Math.abs(value)).padStart(2, '0')}`;
+  }
+  return String(value).padStart(3, '0');
+}
+
+export function updateFace(game: Game): void {
+  if (game.status === 'lost') {
+    faceEl.textContent = '😵';
+  }
+  else if (game.status === 'won') {
+    faceEl.textContent = '😎';
+  }
+  else {
+    faceEl.textContent = '🙂';
+  }
+}
 
 export function initGrid(game: Game): void {
   gridEl.innerHTML = '';
@@ -48,4 +69,9 @@ export function render(game: Game): void {
       btn.textContent = '';
     }
   }
+  const numberOfFlags = game.cells.filter(cell => cell.state === 'flagged').length;
+  const minesLeft = game.mineCount - numberOfFlags;
+  counterEl.textContent = formatCounter(minesLeft);
+
+  updateFace(game);
 }
