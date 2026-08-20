@@ -1,5 +1,5 @@
 import './style.css';
-import { createGame, reveal, toggleFlag } from './board';
+import { createGame, reveal, toggleFlag, chord } from './board';
 import { initGrid, render } from './render';
 
 let game = createGame(9, 9, 10);
@@ -29,7 +29,11 @@ document.querySelector<HTMLButtonElement>('#face')!.addEventListener('click', ()
 gridEl.addEventListener('click', (e) => {
   const i = cellIndexFromEvent(e);
   if (i === null) return;
-  reveal(game, i);
+  if (game.cells[i].state === 'revealed') {
+    chord(game, i);
+  } else {
+    reveal(game, i);
+  }
   render(game);
 });
 

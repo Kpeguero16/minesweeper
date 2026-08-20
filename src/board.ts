@@ -133,3 +133,17 @@ function checkWin(game: Game): void {
     game.status = 'won';
   }
 }
+
+export function chord(game: Game, i: number): void {
+  if (game.status === 'won' || game.status === 'lost') return;
+  const cell = game.cells[i];
+  if (cell.state !== 'revealed') return;
+  const flaggedNeighbors = neighbors(game, i).filter((n) => game.cells[n].state === 'flagged').length;
+  if (flaggedNeighbors === cell.adjacent) {
+    neighbors(game, i).forEach((n) => {
+      if (game.cells[n].state === 'hidden') {
+        reveal(game, n);
+      }
+    });
+  }
+}
